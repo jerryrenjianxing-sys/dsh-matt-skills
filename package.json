@@ -1,0 +1,47 @@
+{
+  "name": "dsh-matt-skills",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "lib/index.js",
+  "bin": {
+    "matt-sync": "./bin/matt-sync.mjs"
+  },
+  "exports": {
+    ".": "./lib/index.js",
+    "./package.json": "./package.json"
+  },
+  "description": "Matt Pocock's 27 engineering skills as a single, switchable DSH bundle: upstream content verbatim, mounted through the official filesystem skill provider, updated in place without reinstalling.",
+  "license": "MIT",
+  "author": "Jerry",
+  "engines": {
+    "node": ">=20"
+  },
+  "files": [
+    "bin",
+    "lib",
+    "skills",
+    "cordis.patch.yml",
+    "README.md",
+    "LICENSE",
+    "LICENSE-mattpocock-skills",
+    "THIRD-PARTY-NOTICES.md"
+  ],
+  "keywords": [
+    "dsh",
+    "deepseek-harness",
+    "plugin",
+    "skills",
+    "mattpocock"
+  ],
+  "scripts": {
+    "test": "node --test test/boot.test.mjs test/catalog.test.mjs test/sync.test.mjs",
+    "sync:check": "node bin/matt-sync.mjs check",
+    "sync:apply": "node bin/matt-sync.mjs apply"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  }
+}

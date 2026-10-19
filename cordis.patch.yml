@@ -1,0 +1,30 @@
+# dsh-matt-skills — bundle layer
+#
+# Two rows, in this order:
+#
+#   1. `matt-skills-boot` — our own module. Seeds `$DSH_HOME/matt-skills/active/skills`
+#      from the package snapshot on first run (later: recovers an interrupted swap).
+#      It returns a promise, so cordis waits before mounting row 2.
+#
+#   2. `matt-skills-fs` — the official filesystem skill provider, pointed at the
+#      data directory. It is a *new* row with an explicit `providerName`, because
+#      the registry throws on duplicate provider names inside one layer and the
+#      shipped preset already owns a provider called `filesystem`.
+#
+# `!!js` is needed in both rows: `dshHomePath()` is provided on the patch context,
+# and the provider resolves `customSkillDirs` relative to the process cwd rather
+# than to this package, so a relative path would point nowhere.
+- insert:
+    - id: matt-skills-boot
+      name: 'dsh-matt-skills'
+      config:
+        root: !!js dshHomePath('matt-skills')
+
+    - id: matt-skills-fs
+      name: '@deepseek-ai/dsh-skill-filesystem'
+      config:
+        providerName: matt-skills
+        includeDefaultRoots: false
+        watch: true
+        customSkillDirs:
+          - !!js process.getBuiltinModule('node:path').join(dshHomePath('matt-skills'), 'active', 'skills')
