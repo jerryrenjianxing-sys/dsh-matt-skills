@@ -3,6 +3,8 @@
 把 [mattpocock/skills](https://github.com/mattpocock/skills) 的 27 个工程技能做成一个
 **可整包开关、可手动增量更新**的 DeepSeek Harness (DSH) 插件。上游内容一字不改。
 
+![DSH 插件页：dsh-matt-skills 已启用，两个组件（matt-skills-boot 与本地技能加载）都在运行](docs/plugin-page.png)
+
 ## 它做什么
 
 - **装一次**：通过 DSH 插件页安装，之后不再重装。
