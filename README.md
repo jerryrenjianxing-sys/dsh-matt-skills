@@ -10,6 +10,48 @@
 - **内置快照**：包内带一份上游原文，断网、首启、更新失败都有东西可用。
 - **手动更新**：`matt_sync` 工具检查并应用上游新版本，只替换数据目录里的内容，**不动插件包**；失败保留旧版，可回滚。
 
+## 它长什么样
+
+**问上游有没有新版**（不下载，只比对 commit）：
+
+```json
+{
+  "kind": "preview",
+  "current":  { "version": "1.3.1", "commit": "24fe0ef…", "skills": 27 },
+  "upstream": { "version": "1.3.1", "commit": "24fe0ef…", "skills": 27 },
+  "upToDate": true,
+  "added": [], "removed": [], "changed": [],
+  "note": "already up to date"
+}
+```
+
+上游真发了新版时，同样的调用会把新增/消失的技能直接列在 `added` / `removed` 里。
+
+**应用更新**（只换数据目录，插件包不重装）：
+
+```json
+{ "kind": "updated", "from": "1.3.1", "to": "1.3.2",
+  "added": ["research"], "removed": [], "changed": ["tdd", "codebase-design"] }
+```
+
+**回滚**：
+
+```json
+{ "kind": "rolled-back", "to": "1.3.1" }
+```
+
+内容逐字节回到上一版，`status().version` 同步回退。
+
+## 和已有的几个移植有什么不同
+
+社区里已有 8 个以上 mattpocock→DSH 的移植（多数把技能直接摊进全局技能目录）。这个项目的取舍不同：
+
+- **开关是 DSH 自己的**：不用自研 UI、不用 `state.json`，就是插件页里的启用/禁用，靠 bundle 层热生效。
+- **内容与代码分离**：更新只换 `$DSH_HOME/matt-skills/active/skills`，插件包永远不重装，失败时旧版一个字节都不动。
+- **零依赖官方 provider 之外的东西**：只插一行 `@deepseek-ai/dsh-skill-filesystem`，不写自定义 provider。
+- **整批校验**：27 个里任何一个 frontmatter 不合法就整次失败，不会悄悄变成 26 个。
+
+
 ## 结构
 
 ```
@@ -28,11 +70,23 @@
 
 ## 安装
 
+DSH 的插件安装本质上就是「往 profile 装一个 npm 包，并把它加进 `dsh.profile.bundles`」，
+所以任何 pnpm 认得的来源都能装：npm 包名、本地目录、`github:user/repo`、tarball。
+
 ```powershell
-dsh plugin --profile desktop add <本目录>
+# 从 GitHub 装（推荐给使用者）
+dsh plugin --profile desktop add github:jerryrenjianxing-sys/dsh-matt-skills
+
+# 从本地目录装（开发时用）
+dsh plugin --profile desktop add C:\path\to\dsh-matt-skills
 ```
 
+也可以直接在 DSH 的**插件页**里添加（它内部调用的就是同一个 `installBundle`）。
+
 装完重启一次 DSH。之后开关和更新都不再需要重启。
+
+> `dsh plugin --profile <名字>` 里的 profile 必须是你实际在用的那个：桌面应用是 `desktop`，
+> 用 `dsh web` 自启的是 `web`。装错 profile 等于没装。
 
 ## 用法
 
