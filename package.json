@@ -1,7 +1,6 @@
 {
   "name": "dsh-matt-skills",
-  "version": "0.1.0",
-  "private": true,
+  "version": "0.1.1",
   "type": "module",
   "main": "lib/index.js",
   "bin": {
@@ -13,9 +12,20 @@
   },
   "description": "Matt Pocock's 27 engineering skills as a single, switchable DSH bundle: upstream content verbatim, mounted through the official filesystem skill provider, updated in place without reinstalling.",
   "license": "MIT",
-  "author": "Jerry",
+  "author": "jerryrenjianxing-sys",
   "engines": {
     "node": ">=20"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jerryrenjianxing-sys/dsh-matt-skills.git"
+  },
+  "homepage": "https://github.com/jerryrenjianxing-sys/dsh-matt-skills#readme",
+  "bugs": {
+    "url": "https://github.com/jerryrenjianxing-sys/dsh-matt-skills/issues"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "files": [
     "bin",
@@ -32,7 +42,8 @@
     "deepseek-harness",
     "plugin",
     "skills",
-    "mattpocock"
+    "mattpocock",
+    "agent-skills"
   ],
   "scripts": {
     "test": "node --test test/boot.test.mjs test/catalog.test.mjs test/sync.test.mjs",
